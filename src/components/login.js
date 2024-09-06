@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('https://inventory-server-phi.vercel.app/user/login', { username, password });
+      const res = await axios.post('https://inventory-server-eight.vercel.app/user/login', { username, password });
       if (res.data.status === 'success') {
         setSuccess('Login successful!');
         setError('');
