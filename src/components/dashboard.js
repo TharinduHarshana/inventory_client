@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -11,13 +11,12 @@ const Sidebar = () => {
     <div className="d-flex">
       {/* Sidebar */}
       <nav className={`bg-primary ${isOpen ? 'd-block' : 'd-none d-lg-block'} p-3`} style={{ minHeight: '100vh', minWidth: '250px' }}>
-        <h2 className="text-white">Splash</h2>
         <ul className="nav flex-column">
           <li className="nav-item">
             <a className="nav-link text-white" href="#">Home</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link text-white" href="#">About</a>
+            <a className="nav-link text-white" href="/inventory">Inventory</a>
           </li>
           <li className="nav-item">
             <a className="nav-link text-white" href="#">Pages</a>
@@ -34,22 +33,13 @@ const Sidebar = () => {
       {/* Page Content */}
       <div className="flex-grow-1">
         <nav className="navbar navbar-light bg-light">
-          {/* Try removing d-lg-none if testing on large screens */}
-          <button
-            className="btn btn-primary d-lg-none"
-            type="button"
-            onClick={toggleSidebar}
-          >
+          <button className="btn btn-primary d-lg-none" type="button" onClick={toggleSidebar}>
             <i className="fas fa-bars"></i> Menu
           </button>
-          <h2>Sidebar #02</h2>
         </nav>
-
         <div className="container mt-4">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
-          </p>
+          {/* Injected Page Content */}
+          {children}
         </div>
       </div>
     </div>
