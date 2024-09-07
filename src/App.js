@@ -5,6 +5,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/login";
 import Dashboard from "./components/dashboard";
 import Inventory from "../src/pages/inventorPage";
+import EditItemPage from "./components/editeInventoryItem";
+import AddItemPage from "./components/addItem";
+
 
 function App() {
   return (
@@ -13,6 +16,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/inventory" element={<Inventory />} />
+        <Route path ="/inventory/:id" element={<EditItemPage/>} />
+        <Route path ="inventory/add" element={<AddItemPage/>} />
       </Routes>
     </BrowserRouter>
   );

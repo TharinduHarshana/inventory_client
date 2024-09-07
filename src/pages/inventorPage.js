@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import Sidebar from '../components/dashboard'; // Import the Sidebar component
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const InventoryPage = () => {
     const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [editingItem, setEditingItem] = useState(null); // For tracking the item being edited
+    const [searchTerm, setSearchTerm] = useState(''); // State to hold the search term
+
+    const navigate = useNavigate(); // Initialize useNavigate
 
     // Fetch data from the backend
     const fetchItems = async () => {
         try {
             const response = await axios.get('https://inventory-server-eight.vercel.app/inventory');
             setItems(response.data.data);
-            setLoading(false);
         } catch (err) {
             setError('Failed to fetch items');
-            setLoading(false);
         }
     };
 
@@ -50,33 +50,38 @@ const InventoryPage = () => {
         });
     };
 
-    // Edit Item Function (To trigger the edit form/modal)
-    const editItem = (item) => {
-        setEditingItem(item);
+    // Edit Item Function (Navigates to the edit page)
+    const editItem = (id) => {
+        navigate(`/inventory/${id}`); // Navigate to the edit page
     };
 
-    const handleEditSubmit = async (id, updatedData) => {
-        try {
-            await axios.put(`https://inventory-server-eight.vercel.app/inventory/${id}`, updatedData);
-            setEditingItem(null); // Reset editing state
-            fetchItems(); // Refresh the list after editing
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    if (loading) {
-        return <p>Loading items...</p>;
-    }
-
-    if (error) {
-        return <p>{error}</p>;
-    }
+    // Filter items based on search term
+    const filteredItems = items.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by name (case insensitive)
+    );
 
     return (
         <Sidebar>
             <div className="container mt-5">
                 <h2>Inventory List</h2>
+
+                {/* Search Bar */}
+                <div className="d-flex justify-content-between mb-3">
+                    <input
+                        type="text"
+                        className="form-control w-50"
+                        placeholder="Search by name"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+                    />
+                    <button className="btn btn-primary" onClick={() => navigate('/inventory/add')}>
+                        Add Item
+                    </button>
+                </div>
+
+                {error && <p>{error}</p>} {/* Display error if any */}
+
+                {/* Inventory Table */}
                 <table className="table table-striped">
                     <thead className="thead-dark">
                         <tr>
@@ -93,7 +98,7 @@ const InventoryPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {items.map(item => (
+                        {filteredItems.map(item => (
                             <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
@@ -107,7 +112,7 @@ const InventoryPage = () => {
                                 <td>
                                     <button
                                         className="btn btn-warning mr-2"
-                                        onClick={() => editItem(item)}
+                                        onClick={() => editItem(item.id)}
                                     >
                                         Edit
                                     </button>
