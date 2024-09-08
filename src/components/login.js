@@ -19,11 +19,6 @@ const Login = () => {
         setSuccess('Login successful!');
         setError('');
         localStorage.setItem('token', res.data.token);
-        Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: 'Login successful!',
-        });
         navigate('/dashboard');
       }
     } catch (err) {

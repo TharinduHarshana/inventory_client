@@ -19,7 +19,7 @@ const Sidebar = ({ children }) => {
             <a className="nav-link text-white" href="/inventory">Inventory</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link text-white" href="#">Pages</a>
+            <a className="nav-link text-white" href="#">Suppliers</a>
           </li>
           <li className="nav-item">
             <a className="nav-link text-white" href="#">Portfolio</a>
