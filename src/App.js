@@ -7,6 +7,9 @@ import Dashboard from "./components/dashboard";
 import Inventory from "../src/pages/inventorPage";
 import EditItemPage from "./components/editeInventoryItem";
 import AddItemPage from "./components/addItem";
+import AddNewSupplier from "./components/addNewSupplier"
+import SupplierPage from "./pages/supplierPage";
+import EditSupplierDetails from "./components/editSupplierDetails";
 
 
 function App() {
@@ -18,6 +21,10 @@ function App() {
         <Route path="/inventory" element={<Inventory />} />
         <Route path ="/inventory/:id" element={<EditItemPage/>} />
         <Route path ="inventory/add" element={<AddItemPage/>} />
+        <Route path ="/suplier/add" element={<AddNewSupplier/>} />
+        <Route path="/suplier" element={<SupplierPage />} />
+        <Route path="/suplier/:_id" element={<EditSupplierDetails/>} />
+        
       </Routes>
     </BrowserRouter>
   );
