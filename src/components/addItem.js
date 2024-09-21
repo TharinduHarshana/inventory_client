@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import Sidebar from '../components/dashboard'; // Import Sidebar
@@ -11,12 +11,14 @@ const AddItemPage = () => {
         tag: '',
         price: '',
         volumeWeight: '',
-        supplier: '',
+        supplier: '', // This will store the selected supplier ID or name
         quantity: '',
         status: '',
         createdAt: '',
         updatedAt: ''
     }); // State to hold the new item details
+
+    const [suppliers, setSuppliers] = useState([]); // State to hold fetched suppliers
     const [error, setError] = useState(null); // Error state
 
     // Handle form input changes
@@ -26,6 +28,20 @@ const AddItemPage = () => {
             [e.target.name]: e.target.value // Update the item state when the user types
         });
     };
+
+    // Fetch data from the backend for suppliers
+    const fetchSuppliers = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/suplier'); // Fetch suppliers from backend
+            setSuppliers(response.data || []); // Set the suppliers data to state
+        } catch (err) {
+            setError('Failed to fetch suppliers'); // Show error if fetching fails
+        }
+    };
+
+    useEffect(() => {
+        fetchSuppliers(); // Fetch suppliers when the component loads
+    }, []);
 
     // Handle form submission
     const handleSubmit = async (e) => {
@@ -114,18 +130,24 @@ const AddItemPage = () => {
                         />
                     </div>
 
-                    {/* Supplier Field */}
+                    {/* Supplier Field as Dropdown */}
                     <div className="form-group">
                         <label htmlFor="supplier">Supplier</label>
-                        <input
-                            type="text"
+                        <select
                             className="form-control"
                             id="supplier"
                             name="supplier"
                             value={item.supplier}
                             onChange={handleChange}
                             required
-                        />
+                        >
+                            <option value="">Select Supplier</option>
+                            {suppliers.map((supplier) => (
+                                <option key={supplier._id} value={supplier.supplierName}>
+                                    {supplier.supplierName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Quantity Field */}

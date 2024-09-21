@@ -7,6 +7,7 @@ const EditItemPage = () => {
     const { id } = useParams(); // Get the item ID from the URL parameters
     const navigate = useNavigate(); // Initialize useNavigate for navigation
     const [item, setItem] = useState(null); // State to hold the item details
+    const [suppliers, setSuppliers] = useState([]); // State to hold suppliers for dropdown
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
 
@@ -24,6 +25,19 @@ const EditItemPage = () => {
         };
         fetchItem();
     }, [id]); // The effect will run every time the `id` changes
+
+    // Fetch supplier data for the dropdown
+    useEffect(() => {
+        const fetchSuppliers = async () => {
+            try {
+                const response = await axios.get('https://inventory-server-eight.vercel.app/suplier');
+                setSuppliers(response.data || []);
+            } catch (err) {
+                setError('Failed to fetch suppliers');
+            }
+        };
+        fetchSuppliers();
+    }, []);
 
     // Handle form input changes
     const handleChange = (e) => {
@@ -123,17 +137,23 @@ const EditItemPage = () => {
                         />
                     </div>
 
-                    {/* Supplier Field */}
+                    {/* Supplier Dropdown Field */}
                     <div className="form-group">
                         <label htmlFor="supplier">Supplier</label>
-                        <input
-                            type="text"
+                        <select
                             className="form-control"
                             id="supplier"
                             name="supplier"
                             value={item.supplier || ''} // Default to empty if item is null
                             onChange={handleChange}
-                        />
+                        >
+                            <option value="">Select Supplier</option>
+                            {suppliers.map((supplier) => (
+                                <option key={supplier._id} value={supplier.supplierName}>
+                                    {supplier.supplierName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Quantity Field */}
@@ -187,10 +207,9 @@ const EditItemPage = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary mt-3 " >
+                    <button type="submit" className="btn btn-primary mt-3">
                         Save Changes
                     </button>
-                   
                 </form>
             </div>
         </Sidebar>

@@ -14,7 +14,7 @@ const EditSupplierDetails = () => {
     const fetchSupplier = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/suplier/${_id}`);
+        const response = await axios.get(`https://inventory-server-eight.vercel.app/suplier/${_id}`);
         console.log("API Response:", response);
 
         // Fix for the typo in the response data
@@ -43,7 +43,7 @@ const EditSupplierDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8000/suplier/${_id}`, supplier);
+      await axios.put(`https://inventory-server-eight.vercel.app/suplier/${_id}`, supplier);
       navigate("/suplier");
     } catch (err) {
       console.error(err);
@@ -101,9 +101,9 @@ const EditSupplierDetails = () => {
             <input
               type="text"
               className="form-control"
-              id="suplierPhone" // use the field as it is in the API response
-              name="suplierPhone" // use the field as it is in the API response
-              value={supplier.suplierPhone || ""} // ensure this matches the typo in the response
+              id="suplierPhone" 
+              name="suplierPhone" 
+              value={supplier.suplierPhone || ""} 
               onChange={handleChange}
             />
           </div>
