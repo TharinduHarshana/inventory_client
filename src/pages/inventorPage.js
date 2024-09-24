@@ -104,8 +104,8 @@ const InventoryPage = () => {
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
                                 <td>{item.tag}</td>
-                                <td>${item.costPrice.toFixed(2)}</td>
-                                <td>${item.sellingPrice.toFixed(2)}</td>
+                                <td>${item.costPrice}</td>
+                                <td>${item.sellingPrice}</td>
                                 <td>{item.volumeWeight}</td>
                                 <td>{item.supplier}</td>
                                 <td>{item.quantity}</td>
