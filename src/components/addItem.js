@@ -9,7 +9,8 @@ const AddItemPage = () => {
         name: '',
         description: '',
         tag: '',
-        price: '',
+        costPrice: '',
+        sellingPrice: '',
         volumeWeight: '',
         supplier: '', // This will store the selected supplier ID or name
         quantity: '',
@@ -104,18 +105,31 @@ const AddItemPage = () => {
 
                     {/* Price Field */}
                     <div className="form-group">
-                        <label htmlFor="price">Price</label>
+                        <label htmlFor="costPrice">Cost Price</label>
                         <input
                             type="number"
                             className="form-control"
-                            id="price"
-                            name="price"
-                            value={item.price}
+                            id="costPrice"
+                            name="costPrice"
+                            value={item.costPrice}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
+                    {/* Selling Price Field */}
+                    <div className="form-group">
+                        <label htmlFor="sellingPrice">Selling Price</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="sellingPrice"
+                            name="sellingPrice"
+                            value={item.sellingPrice}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                     {/* Volume Weight Field */}
                     <div className="form-group">
                         <label htmlFor="volumeWeight">Volume Weight</label>
