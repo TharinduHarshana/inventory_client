@@ -10,7 +10,9 @@ import AddItemPage from "./components/addItem";
 import AddNewSupplier from "./components/addNewSupplier"
 import SupplierPage from "./pages/supplierPage";
 import EditSupplierDetails from "./components/editSupplierDetails";
-
+import AddExpense from "./components/addExpense";
+import ExpensePage from "./pages/expensePage";
+import EditExpense from "./components/editExpence";
 
 function App() {
   return (
@@ -24,6 +26,9 @@ function App() {
         <Route path ="/suplier/add" element={<AddNewSupplier/>} />
         <Route path="/suplier" element={<SupplierPage />} />
         <Route path="/suplier/:_id" element={<EditSupplierDetails/>} />
+        <Route path ="/expense/add" element={<AddExpense/>} />
+        <Route path ="/expense" element={<ExpensePage/>} />
+        <Route path ="/expense/:id" element={<EditExpense/>} />
         
       </Routes>
     </BrowserRouter>

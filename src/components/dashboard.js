@@ -22,7 +22,7 @@ const Sidebar = ({ children }) => {
             <a className="nav-link text-white" href="/suplier">Suppliers</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link text-white" href="#">Portfolio</a>
+            <a className="nav-link text-white" href="/expense">Expenses</a>
           </li>
           <li className="nav-item">
             <a className="nav-link text-white" href="#">Contact</a>
