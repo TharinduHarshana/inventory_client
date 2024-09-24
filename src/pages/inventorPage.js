@@ -88,7 +88,8 @@ const InventoryPage = () => {
                             <th>ID</th>
                             <th>Name</th>
                             <th>Tag</th>
-                            <th>Price</th>
+                            <th>Cost Price</th>
+                            <th>Selling Price</th>
                             <th>Volume Weight</th>
                             <th>Supplier</th>
                             <th>Quantity</th>
@@ -103,7 +104,8 @@ const InventoryPage = () => {
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
                                 <td>{item.tag}</td>
-                                <td>${item.price.toFixed(2)}</td>
+                                <td>${item.costPrice.toFixed(2)}</td>
+                                <td>${item.sellingPrice.toFixed(2)}</td>
                                 <td>{item.volumeWeight}</td>
                                 <td>{item.supplier}</td>
                                 <td>{item.quantity}</td>
