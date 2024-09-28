@@ -13,6 +13,13 @@ import EditSupplierDetails from "./components/editSupplierDetails";
 import AddExpense from "./components/addExpense";
 import ExpensePage from "./pages/expensePage";
 import EditExpense from "./components/editExpence";
+import Customer from "./pages/customerPage";
+import AddCustomer from "./components/addCustomer";
+import Sales from "./components/Sales";
+import Order from "./components/toBeShiftOrders";
+import Shifted from "./components/shiftedOrders";
+import DashboardContent from "./components/dashboardContent";
+import Report  from "./pages/report"
 
 function App() {
   return (
@@ -29,6 +36,13 @@ function App() {
         <Route path ="/expense/add" element={<AddExpense/>} />
         <Route path ="/expense" element={<ExpensePage/>} />
         <Route path ="/expense/:id" element={<EditExpense/>} />
+        <Route path ="/customer" element={<Customer/>} />
+        <Route path ="/customer/add" element={<AddCustomer/>} />
+        <Route path ="/sales" element={<Sales/>} />
+        <Route path ="/shipping" element={<Order/>} />
+        <Route path ="/shifted" element={<Shifted/>} />
+        <Route path="/content" element={<DashboardContent/>}></Route>
+        <Route path="/report" element={<Report/>}></Route>
         
       </Routes>
     </BrowserRouter>
