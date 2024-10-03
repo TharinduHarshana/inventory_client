@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState(localStorage.getItem('selectedStore') || 'store1');
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -14,19 +16,17 @@ const Sidebar = ({ children }) => {
     const store = e.target.value;
     setSelectedStore(store);
     localStorage.setItem('selectedStore', store);
-  
+
     try {
-      // Inform the server to switch the store
-      const response = await fetch('https://inventory-server-eight.vercel.app/set-store', {  // Update the URL to point to the correct backend port
+      const response = await fetch('https://inventory-server-eight.vercel.app/set-store', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ store }),
       });
-  
+
       if (response.ok) {
-        // Only reload the page after the server confirms the DB switch is successful
         window.location.reload();
       } else {
         console.error('Failed to switch stores on the server.');
@@ -35,10 +35,13 @@ const Sidebar = ({ children }) => {
       console.error('Error switching store:', error);
     }
   };
-  
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token from local storage
+    navigate('/'); // Navigate to login page
+  };
 
   useEffect(() => {
-    // Check if store is saved in localStorage and apply that
     const savedStore = localStorage.getItem('selectedStore');
     if (savedStore) {
       setSelectedStore(savedStore);
@@ -104,6 +107,13 @@ const Sidebar = ({ children }) => {
             <a className="nav-link text-white d-flex align-items-center" href="/report" style={{ borderBottom: '1px solid black' }}>
               <i className="fas fa-chart-bar me-2"></i> Report
             </a>
+          </li>
+        </ul>
+        <ul className="nav flex-column mt-3">
+          <li className="nav-item">
+            <button className="btn btn-danger w-100" onClick={handleLogout}>
+              <i className="fas fa-sign-out-alt me-2"></i> Logout
+            </button>
           </li>
         </ul>
       </nav>

@@ -111,15 +111,28 @@ const EditItemPage = () => {
                         />
                     </div>
 
-                    {/* Price Field */}
+                    {/* Cost Price Field */}
                     <div className="form-group">
-                        <label htmlFor="price">Price</label>
+                        <label htmlFor="costPrice">Cost Price</label>
                         <input
                             type="number"
                             className="form-control"
-                            id="price"
-                            name="price"
-                            value={item.price || ''} // Default to empty if item is null
+                            id="costPrice"
+                            name="costPrice"
+                            value={item.costPrice || ''} // Default to empty if item is null
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    {/* Selling Price Field */}
+                    <div className="form-group">
+                        <label htmlFor="sellingPrice">Selling Price</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="sellingPrice"
+                            name="sellingPrice"
+                            value={item.sellingPrice || ''} // Default to empty if item is null
                             onChange={handleChange}
                         />
                     </div>
