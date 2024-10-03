@@ -29,9 +29,9 @@ const OrdersPage = () => {
         // Fetch store from localStorage
         const selectedStore = localStorage.getItem('selectedStore') || 'store1';
         if (selectedStore === 'store1') {
-            setStoreAddress('Ceycent, Main Road, Cityname, Country');
+            setStoreAddress('W.M.K.P.Kumara, Ceycent, Mi-Ella, Matara, 078 911 6273');
         } else if (selectedStore === 'store2') {
-            setStoreAddress('Goldenaroma, Second Avenue, Town, Country');
+            setStoreAddress('W.M.K.P.Kumara, Goldenaroma, Mi-Ella, Matara, 078 911 6273');
         }
     }, []);
 
@@ -49,7 +49,7 @@ const OrdersPage = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`https://inventory-server-eight.vercel.app/sale/${id}`);
+                    await axios.delete(`http://localhost:8000/sale/${id}`);
                     Swal.fire('Deleted!', 'Order has been deleted.', 'success');
                     fetchOrders(); // Refresh list after deletion
                 } catch (err) {
@@ -111,12 +111,12 @@ const OrdersPage = () => {
             .order-box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; page-break-inside: avoid; }
             .address-section { display: flex; justify-content: space-between; margin-bottom: 10px; }
             .to-address, .from-address { width: 48%; font-size: 18px; }
-            .to-address { font-weight: bold; }
-            .from-address { text-align: right; }
+            .to-address { text-align: right; font-weight: bold; } /* Changed to align right */
+            .from-address { text-align: left; } /* Changed to align left */
             .customer-info { font-size: 16px; }
             .items-table { width: 100%; margin-bottom: 10px; border-collapse: collapse; }
             .items-table th, .items-table td { border: 1px solid #000; padding: 5px; text-align: left; }
-            .total-amount, .cod { font-size: 18px; font-weight: bold; text-align: right; margin-top: 10px; }
+            .total-amount, .cod { font-size: 18px; font-weight: bold; text-align: center; margin-top: 10px; }
             @media print {
                 .order-box { page-break-inside: avoid; }
             }
@@ -127,22 +127,22 @@ const OrdersPage = () => {
         orders.forEach(order => {
             printWindow.document.write('<div class="order-box">');
     
-            // Address Section: "To Address" on the left and "From Address" on the right
+            // Address Section: "To Address" on the right and "From Address" on the left
             printWindow.document.write('<div class="address-section">');
     
-            // To Address (Customer Address)
+            // From Address (Store Address) - Now on the left
+            printWindow.document.write('<div class="from-address">');
+            printWindow.document.write(`<div><strong>From:</strong></div>`);
+            printWindow.document.write(`<div>${storeAddress || 'Store Address N/A'}</div>`);
+            printWindow.document.write('</div>');
+    
+            // To Address (Customer Address) - Now on the right
             printWindow.document.write('<div class="to-address">');
             printWindow.document.write(`<div><strong>To:</strong></div>`);
             printWindow.document.write(`<div class="customer-info"><strong>${order.customers[0]?.cusName || 'N/A'}</strong><br>`);
             printWindow.document.write(`${order.customers[0]?.cusAddress?.street || 'N/A'},<br>`);
             printWindow.document.write(`${order.customers[0]?.cusAddress?.city || 'N/A'},<br>`);
             printWindow.document.write(`${order.customers[0]?.cusPhone1 || 'N/A'}</div>`);
-            printWindow.document.write('</div>');
-    
-            // From Address (Store Address)
-            printWindow.document.write('<div class="from-address">');
-            printWindow.document.write(`<div><strong>From:</strong></div>`);
-            printWindow.document.write(`<div>${storeAddress || 'Store Address N/A'}</div>`);
             printWindow.document.write('</div>');
     
             printWindow.document.write('</div>'); // End of Address Section
@@ -159,6 +159,7 @@ const OrdersPage = () => {
         printWindow.document.close();
         printWindow.print();
     };
+    
     
     
 

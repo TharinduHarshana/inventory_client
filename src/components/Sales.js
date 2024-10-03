@@ -27,7 +27,6 @@ const InventorySearch = () => {
         try {
             const response = await axios.get('https://inventory-server-eight.vercel.app/inventory');
             setItems(response.data.data);
-            console.log(response.data.data);
         } catch (err) {
             setError('Failed to fetch items');
         }
@@ -127,36 +126,32 @@ const InventorySearch = () => {
         setShowAddCustomerModal(true); // Open Add Customer modal
     };
 
-    // Function to handle sale completion
     const handleCompleteSale = async () => {
         try {
             // Prepare sale data object
             const saleData = {
                 customerId: selectedCustomer._id, // Use the selected customer's ID
-                customers: [
-                    {
-                        cusID: selectedCustomer.cusID, // Assuming this is the correct format for customer ID
-                        cusName: selectedCustomer.cusName,
-                        cusEmail: selectedCustomer.cusEmail,
-                        cusPhone1: selectedCustomer.cusPhone1,
-                        cusPhone2: selectedCustomer.cusPhone2,
-                        cusAddress: `${selectedCustomer.cusAddress.street}, ${selectedCustomer.cusAddress.city}, ${selectedCustomer.cusAddress.state}, ${selectedCustomer.cusAddress.zip}`
-                    }
-                ],
+                customerDetails: {
+                    name: selectedCustomer.cusName,
+                    email: selectedCustomer.cusEmail,
+                    phone1: selectedCustomer.cusPhone1,
+                    phone2: selectedCustomer.cusPhone2,
+                    address: `${selectedCustomer.cusAddress.street}, ${selectedCustomer.cusAddress.city}, ${selectedCustomer.cusAddress.state}, ${selectedCustomer.cusAddress.zip}`
+                },
                 items: selectedItems.map(item => ({
-                    itemID: item.id, // Use the ID from your item document
+                    id: item.id, // Correct field is 'id', not 'itemID'
                     name: item.name,
                     sellingPrice: item.sellingPrice,
                     quantity: item.quantity,
                     discount: item.discount,
-                    total: calculateTotal(item) // Assuming this calculates the total for this item
+                    total: calculateTotal(item)
                 })),
                 totalAmount: calculateBillTotal(), // Total bill amount
                 date: new Date() // Include the date of the sale
             };
     
             // POST request to save the sale to the backend
-            const response = await axios.post('http://localhost:8000/sale/add', saleData);
+            await axios.post('https://inventory-server-eight.vercel.app/sale/add', saleData);
     
             // Show success message with SweetAlert
             Swal.fire({
@@ -178,6 +173,7 @@ const InventorySearch = () => {
         }
     };
     
+
     // Function to close AddCustomer modal and update the customer list with the newly added customer
     const handleCustomerAdded = (newCustomer) => {
         setCustomers([...customers, newCustomer]);

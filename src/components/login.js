@@ -19,7 +19,7 @@ const Login = () => {
         setSuccess('Login successful!');
         setError('');
         localStorage.setItem('token', res.data.token);
-        navigate('/dashboard');
+        navigate('/content');
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Login failed';
