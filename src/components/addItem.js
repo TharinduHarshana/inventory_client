@@ -33,7 +33,7 @@ const AddItemPage = () => {
     // Fetch data from the backend for suppliers
     const fetchSuppliers = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/suplier'); // Fetch suppliers from backend
+            const response = await axios.get('https://inventory-server-eight.vercel.app/suplier'); // Fetch suppliers from backend
             setSuppliers(response.data || []); // Set the suppliers data to state
         } catch (err) {
             setError('Failed to fetch suppliers'); // Show error if fetching fails

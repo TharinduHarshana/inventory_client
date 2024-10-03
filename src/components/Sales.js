@@ -4,6 +4,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Sidebar from './dashboard';
 import Swal from 'sweetalert2'; // Import SweetAlert
+import AddCustomer from './AddCusModal'; // Import AddCustomer form modal
 
 const InventorySearch = () => {
     const [items, setItems] = useState([]);
@@ -16,6 +17,8 @@ const InventorySearch = () => {
     const [customerSearchTerm, setCustomerSearchTerm] = useState('');
     const [filteredCustomers, setFilteredCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+    const [showAddCustomerModal, setShowAddCustomerModal] = useState(false); // State for modal visibility
 
     const navigate = useNavigate(); // Initialize useNavigate for navigation
 
@@ -118,61 +121,66 @@ const InventorySearch = () => {
         return selectedItems.reduce((total, item) => total + calculateTotal(item), 0).toFixed(2);
     };
 
-    // Handle adding a new customer
+    // Function to handle adding a new customer
     const handleAddNewCustomer = () => {
-        navigate('/customer/add', { state: { fromSalesPage: true } }); // Navigate to customer add form
+        setShowAddCustomerModal(true); // Open Add Customer modal
     };
 
+    // Function to handle sale completion
+    const handleCompleteSale = async () => {
+        try {
+            // Prepare sale data object
+            const saleData = {
+                customerId: selectedCustomer._id, // Use the selected customer's ID
+                customerDetails: {
+                    name: selectedCustomer.cusName,
+                    email: selectedCustomer.cusEmail,
+                    phone1: selectedCustomer.cusPhone1,
+                    phone2: selectedCustomer.cusPhone2,
+                    address: `${selectedCustomer.cusAddress.street}, ${selectedCustomer.cusAddress.city}, ${selectedCustomer.cusAddress.state}, ${selectedCustomer.cusAddress.zip}`
+                },
+                items: selectedItems.map(item => ({
+                    itemID: item.itemID,
+                    name: item.name,
+                    sellingPrice: item.sellingPrice,
+                    quantity: item.quantity,
+                    discount: item.discount,
+                    total: calculateTotal(item)
+                })),
+                totalAmount: calculateBillTotal(), // Total bill amount
+                date: new Date() // Include the date of the sale
+            };
 
-// Function to handle sale completion
-const handleCompleteSale = async () => {
-    try {
-        // Prepare sale data object
-        const saleData = {
-            customerId: selectedCustomer._id, // Use the selected customer's ID
-            customerDetails: {
-                name: selectedCustomer.cusName,
-                email: selectedCustomer.cusEmail,
-                phone1: selectedCustomer.cusPhone1,
-                phone2: selectedCustomer.cusPhone2,
-                address: `${selectedCustomer.cusAddress.street}, ${selectedCustomer.cusAddress.city}, ${selectedCustomer.cusAddress.state}, ${selectedCustomer.cusAddress.zip}`
-            },
-            items: selectedItems.map(item => ({
-                itemID: item.itemID,
-                name: item.name,
-                sellingPrice: item.sellingPrice,
-                quantity: item.quantity,
-                discount: item.discount,
-                total: calculateTotal(item)
-            })),
-            totalAmount: calculateBillTotal(), // Total bill amount
-            date: new Date() // Include the date of the sale
-        };
+            // POST request to save the sale to the backend
+            await axios.post('https://inventory-server-eight.vercel.app/sale/add', saleData);
 
-        // POST request to save the sale to the backend
-        await axios.post('https://inventory-server-eight.vercel.app/sale/add', saleData);
+            // Show success message with SweetAlert
+            Swal.fire({
+                title: 'Sale Completed!',
+                text: 'The sale has been successfully completed and saved.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.reload(); // Refresh the page after successful sale completion
+            });
+        } catch (error) {
+            // Handle error during sale completion
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to complete and save the sale. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
 
-        // Show success message with SweetAlert
-        Swal.fire({
-            title: 'Sale Completed!',
-            text: 'The sale has been successfully completed and saved.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            window.location.reload(); // Refresh the page after successful sale completion
-        });
-    } catch (error) {
-        // Handle error during sale completion
-        Swal.fire({
-            title: 'Error',
-            text: 'Failed to complete and save the sale. Please try again.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-    }
-};
-
-
+    // Function to close AddCustomer modal and update the customer list with the newly added customer
+    const handleCustomerAdded = (newCustomer) => {
+        setCustomers([...customers, newCustomer]);
+        setShowAddCustomerModal(false); // Close the modal after successful addition
+        setSelectedCustomer(newCustomer); // Automatically select the newly added customer
+        
+    };
 
     return (
         <Sidebar>
@@ -212,7 +220,6 @@ const handleCompleteSale = async () => {
                         <table className="table table-striped mt-4">
                             <thead>
                                 <tr>
-                                    
                                     <th>Item Name</th>
                                     <th>Selling Price</th>
                                     <th>Qty</th>
@@ -228,44 +235,38 @@ const handleCompleteSale = async () => {
                                             <td>{item.name}</td>
                                             <td><input type="number" className="form-control" defaultValue={item.sellingPrice} readOnly /></td>
                                             <td>
-                                                <input 
-                                                    type="number" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
                                                     value={item.quantity}
                                                     onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
                                                 />
                                             </td>
                                             <td>
-                                                <input 
-                                                    type="number" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
                                                     value={item.discount}
                                                     onChange={(e) => handleDiscountChange(index, parseInt(e.target.value))}
                                                 />
                                             </td>
                                             <td>{calculateTotal(item).toFixed(2)}</td>
                                             <td>
-                                                <button class="btn-close" aria-label="Close"  onClick={() => removeSelectedItem(index)}></button>
+                                                <button className="btn btn-danger" onClick={() => removeSelectedItem(index)}><i className="fas fa-times"></i> {/* Close icon */}</button>
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="6" className="text-center">There are no items in the cart [Sales]</td>
+                                        <td colSpan="6" className="text-center">No items selected</td>
                                     </tr>
                                 )}
                             </tbody>
                         </table>
                     </div>
 
-                    {/* Right Column for Customers and Total Bill */}
+                    {/* Right Column for Customer Search */}
                     <div className="col-md-4">
-                        {/* New Customer Button */}
-                        <div className="mb-3">
-                            <button className="btn btn-primary" onClick={handleAddNewCustomer}>
-                                Add Customer
-                            </button>
-                        </div>
                         {/* Search Bar for Customers */}
                         <input
                             type="text"
@@ -274,7 +275,7 @@ const handleCompleteSale = async () => {
                             value={customerSearchTerm}
                             onChange={(e) => setCustomerSearchTerm(e.target.value)}
                         />
-                        
+
                         {/* Search Results for Customers */}
                         {customerSearchTerm && (
                             <div className="list-group mb-3">
@@ -293,36 +294,49 @@ const handleCompleteSale = async () => {
                                 )}
                             </div>
                         )}
-
-                      {/* Selected Customer Box */}
-                            {selectedCustomer && (
-                                <div className="alert alert-info mt-3">
-                                    <strong>Selected Customer:</strong>
-                                    <p><strong>Name:</strong> {selectedCustomer.cusName}</p>
-                                    <p><strong>Email:</strong> {selectedCustomer.cusEmail}</p>
-                                    <p><strong>Phone 1:</strong> {selectedCustomer.cusPhone1}</p>
-                                    {selectedCustomer.cusPhone2 && <p><strong>Phone 2:</strong> {selectedCustomer.cusPhone2}</p>}
-                                    <p><strong>Address:</strong> {selectedCustomer.cusAddress.street}, {selectedCustomer.cusAddress.city}, {selectedCustomer.cusAddress.state} - {selectedCustomer.cusAddress.zip}</p>
+                        {/* Selected Customer Details */}
+                        {selectedCustomer ? (
+                            <div className="card mt-3">
+                                <div className="card-body">
+                                    <h5 className="text-primary">Selected Customer</h5>
+                                    <p>Name: {selectedCustomer.cusName}</p>
+                                    <p>Email: {selectedCustomer.cusEmail}</p>
+                                    <p>Phone: {selectedCustomer.cusPhone1} {selectedCustomer.cusPhone2 && `/ ${selectedCustomer.cusPhone2}`}</p>
+                                    <p>Address: {selectedCustomer.cusAddress?.street}, {selectedCustomer.cusAddress?.city}, {selectedCustomer.cusAddress?.state}, {selectedCustomer.cusAddress?.zip}</p>
                                 </div>
-                            )}
+                            </div>
+                        ) : (
+                            <p className="text-center">No customer selected</p>
+                        )}
 
-                        {/* Bill Total Display */}
-                        <div className="mt-4">
-                            <h5>Total Bill: <span className="text-success">Rs:{calculateBillTotal()}</span></h5>
+                        {/* Total Price */}
+                        <div className="text-right mt-4">
+                            <h5 className="text-success font-weight-bold" style={{ fontSize: '1.5rem' }}>
+                                Total: <span className="text-warning">Rs:{calculateBillTotal()}</span>
+                            </h5>
                         </div>
-                    {/* Complete Sale Button */}
-                        <div className="mt-4">
-                            <button
-                                className="btn btn-success"
-                                onClick={handleCompleteSale}
-                                disabled={!selectedCustomer || selectedItems.length === 0} // Disable if no customer or no items
-                            >
-                                Complete Sale
-                            </button>
+
+                        {/* Button to Add New Customer */}
+                        <div className="text-right mt-4">
+                            <button className="btn btn-info" onClick={handleAddNewCustomer}>Add New Customer</button>
                         </div>
+
+                        {/* Complete Sale Button */}
+                        <div className="text-right mt-4">
+                            <button className="btn btn-success" onClick={handleCompleteSale}>Complete Sale</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
+
+            {/* AddCustomer Modal */}
+            {showAddCustomerModal && (
+                <AddCustomer
+                onClose={() => setShowAddCustomerModal(false)}
+                onCustomerAdded={handleCustomerAdded}
+                />
+            )}
         </Sidebar>
     );
 };

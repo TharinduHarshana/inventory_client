@@ -55,8 +55,8 @@ const Sidebar = ({ children }) => {
         <ul className="mb-3">
           <label className="text-white">Select Store:</label>
           <select className="form-select" value={selectedStore} onChange={handleStoreChange}>
-            <option value="store1">Store 1</option>
-            <option value="store2">Store 2</option>
+            <option value="store1">Ceycent</option>
+            <option value="store2">Goldenaroma</option>
           </select>
         </ul>
         <ul className="nav flex-column">
@@ -96,7 +96,7 @@ const Sidebar = ({ children }) => {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link text-white d-flex align-items-center" href="/shifted" style={{ borderBottom: '1px solid black' }}>
+            <a className="nav-link text-white d-flex align-items-center" href="/Shiped" style={{ borderBottom: '1px solid black' }}>
               <i className="fas fa-check-circle me-2"></i> Shipped
             </a>
           </li>

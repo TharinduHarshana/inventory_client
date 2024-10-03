@@ -14,7 +14,7 @@ const OrdersPage = () => {
     const fetchOrders = async () => {
         try {
             const response = await axios.get('https://inventory-server-eight.vercel.app/sale');
-            const filteredOrders = (response.data || []).filter(order => order.saleStatus === 'Shifted');
+            const filteredOrders = (response.data || []).filter(order => order.saleStatus === 'Shiped');
             setOrders(filteredOrders); // Set only the filtered orders
         } catch (err) {
             setError('Failed to fetch orders');

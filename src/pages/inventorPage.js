@@ -104,8 +104,8 @@ const InventoryPage = () => {
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
                                 <td>{item.tag}</td>
-                                <td>${item.costPrice}</td>
-                                <td>${item.sellingPrice}</td>
+                                <td>Rs:{item.costPrice}</td>
+                                <td>Rs:{item.sellingPrice}</td>
                                 <td>{item.volumeWeight}</td>
                                 <td>{item.supplier}</td>
                                 <td>{item.quantity}</td>
@@ -113,17 +113,17 @@ const InventoryPage = () => {
                                 <td>{new Date(item.createdAt).toLocaleDateString()}</td>
                                 <td>
                                     <button
-                                        className="btn btn-warning mt-2"
+                                        className="btn btn-warning m-2"
                                         onClick={() => editItem(item.id)}
                                     >
-                                        Edit
+                                        <i className="fas fa-edit"></i>
+                                        
                                     </button>
-                                    <span style={{ margin: "0 8px" }}></span>
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-danger m-2"
                                         onClick={() => deleteItem(item.id)}
                                     >
-                                        Delete
+                                        <i className="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
                             </tr>

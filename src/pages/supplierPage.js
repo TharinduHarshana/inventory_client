@@ -106,14 +106,14 @@ const SupplierPage = () => {
                                             className="btn btn-warning mr-2"
                                             onClick={() => editSupplier(supplier._id)}
                                         >
-                                            Edit
+                                            <i className="fas fa-edit"></i>
                                         </button>
                                         <span style={{ margin: "0 8px" }}></span>
                                         <button
                                             className="btn btn-danger"
                                             onClick={() => deleteSupplier(supplier._id)}
                                         >
-                                            Delete
+                                            <i className="fas fa-edit"></i>
                                         </button>
                                     </td>
                                 </tr>

@@ -115,13 +115,13 @@ const filteredExpenses = expenses && expenses.length > 0
                                         className="btn btn-warning m-1"
                                         onClick={() => editExpense(expense._id)}
                                     >
-                                        Edit
+                                        <i className="fas fa-edit"></i>
                                     </button>
                                     <button
                                         className="btn btn-danger"
                                         onClick={() => deleteExpense(expense._id)}
                                     >
-                                        Delete
+                                         <i className="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
                             </tr>

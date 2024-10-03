@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Sidebar from './dashboard'; // Import Sidebar component
@@ -8,7 +8,7 @@ const OrdersPage = () => {
     const [orders, setOrders] = useState([]); // State to store orders
     const [error, setError] = useState(null); // State to store errors
     const [searchTerm, setSearchTerm] = useState(''); // State to store search term
-    const printRef = useRef(null); // Ref for printable area
+    const [storeAddress, setStoreAddress] = useState(''); // State for store address
 
     const navigate = useNavigate(); // Initialize useNavigate
 
@@ -16,7 +16,6 @@ const OrdersPage = () => {
     const fetchOrders = async () => {
         try {
             const response = await axios.get('https://inventory-server-eight.vercel.app/sale');
-            // Filter orders with status "To be Shift"
             const filteredOrders = (response.data || []).filter(order => order.saleStatus === 'To be Shift');
             setOrders(filteredOrders); // Set only the filtered orders
         } catch (err) {
@@ -26,6 +25,14 @@ const OrdersPage = () => {
 
     useEffect(() => {
         fetchOrders(); // Fetch orders when component loads
+
+        // Fetch store from localStorage
+        const selectedStore = localStorage.getItem('selectedStore') || 'store1';
+        if (selectedStore === 'store1') {
+            setStoreAddress('Ceycent, Main Road, Cityname, Country');
+        } else if (selectedStore === 'store2') {
+            setStoreAddress('Goldenaroma, Second Avenue, Town, Country');
+        }
     }, []);
 
     // Delete order with confirmation
@@ -81,13 +88,13 @@ const OrdersPage = () => {
                 const trackingNumber = result.value;
 
                 try {
-                    // Update the order status to "Shifted" and set the tracking number
+                    // Update the order status to "Shiped" and set the tracking number
                     await axios.put(`https://inventory-server-eight.vercel.app/sale/${order._id}`, {
                         trackingNumber,
-                        saleStatus: 'Shifted'
+                        saleStatus: 'Shiped'
                     });
 
-                    Swal.fire('Success!', 'Order status updated to Shifted.', 'success');
+                    Swal.fire('Success!', 'Order status updated to Shiped.', 'success');
                     fetchOrders(); // Refresh the orders after updating
                 } catch (err) {
                     Swal.fire('Error!', 'Failed to update order status.', 'error');
@@ -96,30 +103,78 @@ const OrdersPage = () => {
         });
     };
 
-    // Handle printing of "To be Shift" orders customer details
-    const printAddresses = () => {
-        const printContent = printRef.current.innerHTML;
+    const printOrders = () => {
         const printWindow = window.open('', '_blank');
-        printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write(printContent);
+        printWindow.document.write('<html><head><title>Print Orders</title><style>');
+        printWindow.document.write(`
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .order-box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; page-break-inside: avoid; }
+            .address-section { display: flex; justify-content: space-between; margin-bottom: 10px; }
+            .to-address, .from-address { width: 48%; font-size: 18px; }
+            .to-address { font-weight: bold; }
+            .from-address { text-align: right; }
+            .customer-info { font-size: 16px; }
+            .items-table { width: 100%; margin-bottom: 10px; border-collapse: collapse; }
+            .items-table th, .items-table td { border: 1px solid #000; padding: 5px; text-align: left; }
+            .total-amount, .cod { font-size: 18px; font-weight: bold; text-align: right; margin-top: 10px; }
+            @media print {
+                .order-box { page-break-inside: avoid; }
+            }
+        `);
+        printWindow.document.write('</style></head><body>');
+    
+        // Loop through each order and format the details for printing
+        orders.forEach(order => {
+            printWindow.document.write('<div class="order-box">');
+    
+            // Address Section: "To Address" on the left and "From Address" on the right
+            printWindow.document.write('<div class="address-section">');
+    
+            // To Address (Customer Address)
+            printWindow.document.write('<div class="to-address">');
+            printWindow.document.write(`<div><strong>To:</strong></div>`);
+            printWindow.document.write(`<div class="customer-info"><strong>${order.customers[0]?.cusName || 'N/A'}</strong><br>`);
+            printWindow.document.write(`${order.customers[0]?.cusAddress?.street || 'N/A'},<br>`);
+            printWindow.document.write(`${order.customers[0]?.cusAddress?.city || 'N/A'},<br>`);
+            printWindow.document.write(`${order.customers[0]?.cusPhone1 || 'N/A'}</div>`);
+            printWindow.document.write('</div>');
+    
+            // From Address (Store Address)
+            printWindow.document.write('<div class="from-address">');
+            printWindow.document.write(`<div><strong>From:</strong></div>`);
+            printWindow.document.write(`<div>${storeAddress || 'Store Address N/A'}</div>`);
+            printWindow.document.write('</div>');
+    
+            printWindow.document.write('</div>'); // End of Address Section
+    
+            // COD and Total Price
+            printWindow.document.write('<div class="cod">');
+            printWindow.document.write(`<div>COD</div><div>Rs-${order.totalAmount}</div>`);
+            printWindow.document.write('</div>');
+    
+            printWindow.document.write('</div>'); // End of Order Box
+        });
+    
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();
     };
+    
+    
 
     // Filter orders based on search term
     const filteredOrders = orders && orders.length > 0
         ? orders.filter(order =>
-            order.customers[0]?.cusName && order.customers[0].cusName.toLowerCase().includes(searchTerm.toLowerCase())||
-            order.customers[0]?.cusName && order.customers[0].cusPhone1.toLowerCase().includes(searchTerm.toLowerCase())||
-            order.customers[0]?.cusName && order.customers[0].cusPhone2.toLowerCase().includes(searchTerm.toLowerCase())
+            order.customers[0]?.cusName && order.customers[0].cusName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.customers[0]?.cusPhone1 && order.customers[0].cusPhone1.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.customers[0]?.cusPhone2 && order.customers[0].cusPhone2.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
 
     return (
         <Sidebar>
             <div className="container mt-5">
-                <h2>Orders List</h2>
+                <h2>Pending Orders List</h2>
 
                 {/* Search Bar */}
                 <div className="d-flex justify-content-between mb-3">
@@ -130,8 +185,8 @@ const OrdersPage = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)} // Update search term
                     />
-                    <button className="btn btn-primary" onClick={printAddresses}>
-                        Print Address
+                    <button className="btn btn-primary" onClick={printOrders}>
+                        Print Orders
                     </button>
                 </div>
 
@@ -143,53 +198,31 @@ const OrdersPage = () => {
                         <tr>
                             <th>Customer Details</th>
                             <th>Item Details</th>
-                            <th>Total Amount</th>
-                            <th>Sale Status</th>
+                            <th>Total</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredOrders.map((order) => (
+                        {filteredOrders.map(order => (
                             <tr key={order._id}>
-                                {/* Customer Details */}
                                 <td>
-                                    <strong>Name:</strong> {order.customers[0]?.cusName} <br />
-                                    <strong>Email:</strong> {order.customers[0]?.cusEmail} <br />
-                                    <strong>Phone 1:</strong> {order.customers[0]?.cusPhone1} <br />
-                                    <strong>Phone 2:</strong> {order.customers[0]?.cusPhone2 || 'N/A'} <br />
-                                    <strong>Address:</strong> 
-                                    {order.customers[0]?.cusAddress
-                                        ? `${order.customers[0]?.cusAddress.street}, ${order.customers[0]?.cusAddress.city}`
-                                        : 'Not Available'}
+                                    {order.customers[0]?.cusName}<br />
+                                    {order.customers[0]?.cusAddress?.street}, {order.customers[0]?.cusAddress?.city}<br />
+                                    {order.customers[0]?.cusPhone1}
                                 </td>
-                                
-                                {/* Item Details */}
                                 <td>
-                                    {order.items.map((item, index) => (
-                                        <div key={index}>
-                                            <strong>Item Name:</strong> {item.name} <br />
-                                            <strong>Quantity:</strong> {item.quantity} <br />
-                                            <strong>Price:</strong> ${item.sellingPrice} <br />
-                                            <strong>Discount:</strong> {item.discount || '0'}% <br />
-                                            <strong>Total:</strong> ${item.total} <br />
-                                            <hr />
+                                    {order.items.map(item => (
+                                        <div key={item._id}>
+                                            {item.name} - {item.quantity} x Rs:{item.sellingPrice}
                                         </div>
                                     ))}
                                 </td>
-                                
-                                <td>{order.totalAmount}</td>
-                                <td>{order.saleStatus}</td>
+                                <td>Rs:{order.totalAmount}</td>
                                 <td>
-                                    <button
-                                        className="btn btn-info m-1"
-                                        onClick={() => enterTrackingNumber(order)}
-                                    >
-                                        Enter Tracking Number
+                                    <button className="btn btn-primary btn-sm m-1" onClick={() => enterTrackingNumber(order)}>
+                                        Enter Tracking
                                     </button>
-                                    <button
-                                        className="btn btn-danger m-1"
-                                        onClick={() => deleteOrder(order._id)}
-                                    >
+                                    <button className="btn btn-danger btn-sm m-1" onClick={() => deleteOrder(order._id)}>
                                         Delete
                                     </button>
                                 </td>
@@ -197,24 +230,6 @@ const OrdersPage = () => {
                         ))}
                     </tbody>
                 </table>
-
-                {/* Printable Area for Customer Addresses */}
-                <div ref={printRef} style={{ display: 'none' }}>
-                    <h3>Customer Address List for "To be Shift" Orders</h3>
-                    {orders.map((order) => (
-                        <div key={order._id} style={{ marginBottom: '20px' }}>
-                            <p><strong>Customer Name:</strong> {order.customers[0]?.cusName || 'N/A'}</p>
-                            <p>
-                                <strong>Address:</strong> {order.customers[0]?.cusAddress
-                                    ? `${order.customers[0]?.cusAddress.street}, ${order.customers[0]?.cusAddress.city}`
-                                    : 'Not Available'}
-                            </p>
-                            <p><strong>Phone Number 1:</strong> {order.customers[0]?.cusPhone1 || 'N/A'}</p>
-                            <p><strong>Phone Number 2:</strong> {order.customers[0]?.cusPhone2 || 'N/A'}</p>
-                            <hr />
-                        </div>
-                    ))}
-                </div>
             </div>
         </Sidebar>
     );

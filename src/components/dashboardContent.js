@@ -17,7 +17,7 @@ const Dashboard = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [error, setError] = useState(null);
   const [totalOrders, setTotalOrders] = useState(0);
-  const [totalShiftedOrders, setTotalShiftedOrders] = useState(0);
+  const [totalShipedOrders, setTotalShipedOrders] = useState(0);
   const [dailySalesData, setDailySalesData] = useState([]);
 
   // Fetch daily sales totals
@@ -80,13 +80,13 @@ const Dashboard = () => {
     }
   };
 
-  const FetchShiftedOrders = async () => {
+  const FetchShipedOrders = async () => {
     try {
       const response = await axios.get('https://inventory-server-eight.vercel.app/sale');
-      const shiftedOrders = (response.data || []).filter(order => order.saleStatus === 'Shifted');
-      setTotalShiftedOrders(shiftedOrders.length); // Set the total number of shifted orders
+      const shipedOrders = (response.data || []).filter(order => order.saleStatus === 'Shiped');
+      setTotalShipedOrders(shipedOrders.length); // Set the total number of shiped orders
     } catch (err) {
-      setError('Failed to fetch "Shifted" orders');
+      setError('Failed to fetch "Shiped" orders');
     }
   };
 
@@ -110,7 +110,7 @@ const Dashboard = () => {
     fetchTotalCustomers();
     fetchTotalItems();
     FetchtoBeShiftOrders();
-    FetchShiftedOrders();
+    FetchShipedOrders();
   }, []);
 
   // Prepare data for the Bar chart
@@ -188,13 +188,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Shifted Orders Card */}
+          {/* Shiped Orders Card */}
           <div className="col-md-3 mb-4">
             <div className="card h-100 text-center bg-info text-white shadow">
               <div className="card-body">
                 <i className="fas fa-truck fa-2x mb-2"></i>
-                <h3>{totalShiftedOrders}</h3>
-                <h5>Shifted Orders</h5>
+                <h3>{totalShipedOrders}</h3>
+                <h5>Shiped Orders</h5>
               </div>
             </div>
           </div>

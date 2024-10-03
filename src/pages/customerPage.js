@@ -110,13 +110,13 @@ const CustomerPage = () => {
                                         className="btn btn-warning m-1"
                                         onClick={() => editCustomer(customer._id)}
                                     >
-                                        Edit
+                                        <i className="fas fa-edit"></i>
                                     </button>
                                     <button
                                         className="btn btn-danger"
                                         onClick={() => deleteCustomer(customer._id)}
                                     >
-                                        Delete
+                                         <i className="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
                             </tr>
