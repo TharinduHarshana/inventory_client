@@ -27,6 +27,8 @@ const Sidebar = ({ children }) => {
       });
 
       if (response.ok) {
+        // Wait for the store switch to complete before reloading or fetching data
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Small delay to ensure connection is established
         window.location.reload();
       } else {
         console.error('Failed to switch stores on the server.');
@@ -35,6 +37,7 @@ const Sidebar = ({ children }) => {
       console.error('Error switching store:', error);
     }
   };
+
 
   const handleLogout = () => {
     localStorage.removeItem('token'); // Remove token from local storage
