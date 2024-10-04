@@ -44,19 +44,8 @@ const InventorySearch = () => {
     useEffect(() => {
         fetchItems();
         fetchCustomers();
-
-        // Load selected items from localStorage
-        const savedItems = localStorage.getItem('selectedItems');
-        if (savedItems) {
-            setSelectedItems(JSON.parse(savedItems));
-        }
     }, []);
-
-    // Update localStorage whenever selectedItems changes
-    useEffect(() => {
-        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
-    }, [selectedItems]);
-
+    
     // Search function for items (Main Search Bar)
     useEffect(() => {
         const results = items.filter(

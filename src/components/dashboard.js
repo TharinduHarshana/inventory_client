@@ -18,25 +18,28 @@ const Sidebar = ({ children }) => {
     localStorage.setItem('selectedStore', store);
 
     try {
-      const response = await fetch('https://inventory-server-eight.vercel.app/set-store', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ store }),
-      });
+        const response = await fetch('https://inventory-server-eight.vercel.app/set-store', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ store }),
+        });
 
-      if (response.ok) {
-        // Wait for the store switch to complete before reloading or fetching data
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Small delay to ensure connection is established
-        window.location.reload();
-      } else {
-        console.error('Failed to switch stores on the server.');
-      }
+        if (response.ok) {
+            const data = await response.json(); // Get success response
+            console.log(data.message); // Log success message
+            // Optional: Add a delay to ensure all models are refreshed after store switch
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000); // 1 second delay to ensure data is reloaded properly
+        } else {
+            console.error('Failed to switch stores on the server.');
+        }
     } catch (error) {
-      console.error('Error switching store:', error);
+        console.error('Error switching store:', error);
     }
-  };
+};
 
 
   const handleLogout = () => {
