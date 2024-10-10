@@ -24,7 +24,7 @@ const AddCustomer = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://inventory-server-gamma.vercel.app//customer/add', customer);
+            await axios.post('https://inventory-server-gamma.vercel.app/customer/add', customer);
             navigate('/customer'); // Redirect to the customer list page
         } catch (err) {
             console.error(err);

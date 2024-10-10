@@ -22,7 +22,7 @@ const AddSupplierForm = () => {
         };
 
         try {
-            const response = await axios.post('https://inventory-server-gamma.vercel.app//suplier/add', newSupplier);
+            const response = await axios.post('https://inventory-server-gamma.vercel.app/suplier/add', newSupplier);
             setMessage({ type: 'success', text: response.data.message });
             navigate('/suplier');
 

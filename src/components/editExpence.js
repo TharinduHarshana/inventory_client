@@ -15,7 +15,7 @@ const EditExpense = () => {
     const fetchExpense = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`https://inventory-server-gamma.vercel.app//expense/${id}`);
+        const response = await axios.get(`https://inventory-server-gamma.vercel.app/expense/${id}`);
         console.log("API Response:", response);
 
         if (response.data) {
@@ -45,7 +45,7 @@ const EditExpense = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://inventory-server-gamma.vercel.app//expense/${id}`, expense);
+      await axios.put(`https://inventory-server-gamma.vercel.app/expense/${id}`, expense);
       navigate("/expense");
     } catch (err) {
       console.error(err);

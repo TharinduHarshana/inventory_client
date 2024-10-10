@@ -19,7 +19,7 @@ const AddCustomer = ({ onClose, onCustomerAdded }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://inventory-server-gamma.vercel.app//customer/add', customer);
+            const response = await axios.post('https://inventory-server-gamma.vercel.app/customer/add', customer);
             onCustomerAdded(response.data);  // Notify parent with the new customer
             
         } catch (err) {

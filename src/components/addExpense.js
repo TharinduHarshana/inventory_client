@@ -17,7 +17,7 @@ const AddExpense = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://inventory-server-gamma.vercel.app//expense/add', expense);
+            await axios.post('https://inventory-server-gamma.vercel.app/expense/add', expense);
             navigation('/expense');
         } catch (err) {
             console.error(err);

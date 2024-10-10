@@ -25,7 +25,7 @@ const InventorySearch = () => {
     // Fetch data from the backend
     const fetchItems = async () => {
         try {
-            const response = await axios.get('https://inventory-server-gamma.vercel.app//inventory');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app/inventory');
             setItems(response.data.data);
         } catch (err) {
             setError('Failed to fetch items');
@@ -34,7 +34,7 @@ const InventorySearch = () => {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('https://inventory-server-gamma.vercel.app//customer/');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app/customer/');
             setCustomers(response.data || []);
         } catch (err) {
             setError('Failed to fetch customers');
@@ -140,7 +140,7 @@ const InventorySearch = () => {
             };
     
             // POST request to save the sale to the backend
-            await axios.post('https://inventory-server-gamma.vercel.app//sale/add', saleData);
+            await axios.post('https://inventory-server-gamma.vercel.app/sale/add', saleData);
     
             // Show success message with SweetAlert
             Swal.fire({

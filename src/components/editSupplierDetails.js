@@ -14,7 +14,7 @@ const EditSupplierDetails = () => {
     const fetchSupplier = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`https://inventory-server-gamma.vercel.app//suplier/${_id}`);
+        const response = await axios.get(`https://inventory-server-gamma.vercel.app/suplier/${_id}`);
         console.log("API Response:", response);
 
         // Fix for the typo in the response data
@@ -43,7 +43,7 @@ const EditSupplierDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://inventory-server-gamma.vercel.app//suplier/${_id}`, supplier);
+      await axios.put(`https://inventory-server-gamma.vercel.app/suplier/${_id}`, supplier);
       navigate("/suplier");
     } catch (err) {
       console.error(err);

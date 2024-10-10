@@ -23,7 +23,7 @@ const Dashboard = () => {
   // Fetch daily sales totals
   const fetchDailySalesTotals = async () => {
     try {
-      const response = await axios.get('https://inventory-server-gamma.vercel.app//sale');
+      const response = await axios.get('https://inventory-server-gamma.vercel.app/sale');
       const completedSales = (response.data || []).filter(order => order.saleStatus === 'completed');
       
       // Group sales by date
@@ -42,7 +42,7 @@ const Dashboard = () => {
   // Fetch total sales, customers, items, and orders
   const fetchTotalSales = async () => {
     try {
-      const response = await axios.get('https://inventory-server-gamma.vercel.app//sale'); // Fetch all sales
+      const response = await axios.get('https://inventory-server-gamma.vercel.app/sale'); // Fetch all sales
       const completedSales = (response.data || []).filter(
         (order) => order.saleStatus === 'completed' && isDateInCurrentMonth(order.createdAt)
       );
@@ -54,7 +54,7 @@ const Dashboard = () => {
 
   const fetchTotalCustomers = async () => {
     try {
-      const response = await axios.get('https://inventory-server-gamma.vercel.app//customer');
+      const response = await axios.get('https://inventory-server-gamma.vercel.app/customer');
       setTotalCustomers(response.data.length); // Set the total number of customers
     } catch (err) {
       setError('Failed to fetch total customers');
@@ -63,7 +63,7 @@ const Dashboard = () => {
 
   const fetchTotalItems = async () => {
     try {
-      const response = await axios.get('https://inventory-server-gamma.vercel.app//inventory');
+      const response = await axios.get('https://inventory-server-gamma.vercel.app/inventory');
       setTotalItems(response.data.data.length); // Set the total number of items
     } catch (err) {
       setError('Failed to fetch total items');
@@ -72,7 +72,7 @@ const Dashboard = () => {
 
   const FetchtoBeShiftOrders = async () => {
     try {
-      const response = await axios.get('https://inventory-server-gamma.vercel.app//sale');
+      const response = await axios.get('https://inventory-server-gamma.vercel.app/sale');
       const toBeShiftOrders = (response.data || []).filter(order => order.saleStatus === 'To be Shift');
       setTotalOrders(toBeShiftOrders.length); // Set the total number of "To be Shift" orders
     } catch (err) {
@@ -82,7 +82,7 @@ const Dashboard = () => {
 
   const FetchShipedOrders = async () => {
     try {
-      const response = await axios.get('https://inventory-server-gamma.vercel.app//sale');
+      const response = await axios.get('https://inventory-server-gamma.vercel.app/sale');
       const shipedOrders = (response.data || []).filter(order => order.saleStatus === 'Shiped');
       setTotalShipedOrders(shipedOrders.length); // Set the total number of shiped orders
     } catch (err) {

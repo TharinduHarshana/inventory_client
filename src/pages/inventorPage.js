@@ -14,7 +14,7 @@ const InventoryPage = () => {
     // Fetch data from the backend
     const fetchItems = async () => {
         try {
-            const response = await axios.get('https://inventory-server-gamma.vercel.app//inventory');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app/inventory');
             setItems(response.data.data);
         } catch (err) {
             setError('Failed to fetch items');
@@ -39,7 +39,7 @@ const InventoryPage = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`https://inventory-server-gamma.vercel.app//inventory/${id}`);
+                    await axios.delete(`https://inventory-server-gamma.vercel.app/inventory/${id}`);
                     Swal.fire('Deleted!', 'Your item has been deleted.', 'success');
                     fetchItems(); // Refresh the list after deletion
                 } catch (err) {

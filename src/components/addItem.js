@@ -33,7 +33,7 @@ const AddItemPage = () => {
     // Fetch data from the backend for suppliers
     const fetchSuppliers = async () => {
         try {
-            const response = await axios.get('https://inventory-server-gamma.vercel.app//suplier'); // Fetch suppliers from backend
+            const response = await axios.get('https://inventory-server-gamma.vercel.app/suplier'); // Fetch suppliers from backend
             setSuppliers(response.data || []); // Set the suppliers data to state
         } catch (err) {
             setError('Failed to fetch suppliers'); // Show error if fetching fails
@@ -48,7 +48,7 @@ const AddItemPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://inventory-server-gamma.vercel.app//inventory/add', item); // Add the new item
+            await axios.post('https://inventory-server-gamma.vercel.app/inventory/add', item); // Add the new item
             navigate('/inventory'); // Navigate back to the inventory list after adding the item
         } catch (err) {
             console.error(err); // Log error in case of failure
