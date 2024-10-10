@@ -15,7 +15,7 @@ const OrdersPage = () => {
     // Fetch all orders from backend
     const fetchOrders = async () => {
         try {
-            const response = await axios.get('https://inventory-server-eight.vercel.app/sale');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app//sale');
             const filteredOrders = (response.data || []).filter(order => order.saleStatus === 'To be Shift');
             setOrders(filteredOrders); // Set only the filtered orders
         } catch (err) {
@@ -89,7 +89,7 @@ const OrdersPage = () => {
 
                 try {
                     // Update the order status to "Shiped" and set the tracking number
-                    await axios.put(`https://inventory-server-eight.vercel.app/sale/${order._id}`, {
+                    await axios.put(`https://inventory-server-gamma.vercel.app//sale/${order._id}`, {
                         trackingNumber,
                         saleStatus: 'Shiped'
                     });

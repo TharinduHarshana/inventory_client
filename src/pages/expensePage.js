@@ -15,7 +15,7 @@ const ExpensePage = () => {
     // Fetch all expenses from backend
     const fetchExpenses = async () => {
         try {
-            const response = await axios.get('https://inventory-server-eight.vercel.app/expense');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app//expense');
             setExpenses(response.data || []);
         } catch (err) {
             setError('Failed to fetch expenses');
@@ -49,7 +49,7 @@ const ExpensePage = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`https://inventory-server-eight.vercel.app/expense/${id}`);
+                    await axios.delete(`https://inventory-server-gamma.vercel.app//expense/${id}`);
                     Swal.fire('Deleted!', 'Expense has been deleted.', 'success');
                     fetchExpenses(); // Refresh list after deletion
                 } catch (err) {

@@ -14,7 +14,7 @@ const SupplierPage = () => {
     // Fetch data from the backend
     const fetchSuppliers = async () => {
         try {
-            const response = await axios.get('https://inventory-server-eight.vercel.app/suplier');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app//suplier');
             setSuppliers(response.data || []);
         } catch (err) {
             setError('Failed to fetch suppliers');
@@ -39,7 +39,7 @@ const SupplierPage = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`https://inventory-server-eight.vercel.app/suplier/${id}`); 
+                    await axios.delete(`https://inventory-server-gamma.vercel.app//suplier/${id}`); 
                     Swal.fire('Deleted!', 'Your supplier has been deleted.', 'success');
                     fetchSuppliers(); // Refresh the list after deletion
                 } catch (err) {

@@ -13,15 +13,15 @@ const MonthlyReport = () => {
   const fetchData = async () => {
     try {
       // Fetch total sales
-      const salesResponse = await axios.get("https://inventory-server-eight.vercel.app/report/sales");
+      const salesResponse = await axios.get("https://inventory-server-gamma.vercel.app//report/sales");
       setSales(salesResponse.data);
 
       // Fetch total expenses
-      const expensesResponse = await axios.get("https://inventory-server-eight.vercel.app/report/expenses");
+      const expensesResponse = await axios.get("https://inventory-server-gamma.vercel.app//report/expenses");
       setExpenses(expensesResponse.data);
 
       // Fetch total profit
-      const profitResponse = await axios.get("https://inventory-server-eight.vercel.app/report/profit");
+      const profitResponse = await axios.get("https://inventory-server-gamma.vercel.app//report/profit");
       setProfit(profitResponse.data.totalProfit);
     } catch (err) {
       console.error("Error fetching report data:", err);

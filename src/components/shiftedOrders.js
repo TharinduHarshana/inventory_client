@@ -13,7 +13,7 @@ const OrdersPage = () => {
     // Fetch all orders from backend
     const fetchOrders = async () => {
         try {
-            const response = await axios.get('https://inventory-server-eight.vercel.app/sale');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app//sale');
             const filteredOrders = (response.data || []).filter(order => order.saleStatus === 'Shiped');
             setOrders(filteredOrders); // Set only the filtered orders
         } catch (err) {
@@ -39,7 +39,7 @@ const OrdersPage = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`https://inventory-server-eight.vercel.app/sale/${id}`);
+                    await axios.delete(`https://inventory-server-gamma.vercel.app//sale/${id}`);
                     Swal.fire('Deleted!', 'Order has been deleted.', 'success');
                     fetchOrders(); // Refresh list after deletion
                 } catch (err) {
@@ -62,7 +62,7 @@ const OrdersPage = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.put(`https://inventory-server-eight.vercel.app/sale/${id}`, { saleStatus: 'completed' });
+                    await axios.put(`https://inventory-server-gamma.vercel.app//sale/${id}`, { saleStatus: 'completed' });
                     Swal.fire('Completed!', 'Order status updated to Completed.', 'success');
                     fetchOrders(); // Refresh list after status update
                 } catch (err) {

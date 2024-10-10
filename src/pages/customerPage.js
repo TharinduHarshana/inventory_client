@@ -14,7 +14,7 @@ const CustomerPage = () => {
     // Fetch all customers from backend
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('https://inventory-server-eight.vercel.app/customer');
+            const response = await axios.get('https://inventory-server-gamma.vercel.app//customer');
             setCustomers(response.data || []);
         } catch (err) {
             setError('Failed to fetch customers');
@@ -39,7 +39,7 @@ const CustomerPage = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`https://inventory-server-eight.vercel.app/customer/${id}`);
+                    await axios.delete(`https://inventory-server-gamma.vercel.app//customer/${id}`);
                     Swal.fire('Deleted!', 'Customer has been deleted.', 'success');
                     fetchCustomers(); // Refresh list after deletion
                 } catch (err) {

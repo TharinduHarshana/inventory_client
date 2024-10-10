@@ -15,7 +15,7 @@ const EditItemPage = () => {
     useEffect(() => {
         const fetchItem = async () => {
             try {
-                const response = await axios.get(`https://inventory-server-eight.vercel.app/inventory/${id}`);
+                const response = await axios.get(`https://inventory-server-gamma.vercel.app//inventory/${id}`);
                 setItem(response.data.data);
                 setLoading(false); // Set loading to false after fetching the data
             } catch (err) {
@@ -30,7 +30,7 @@ const EditItemPage = () => {
     useEffect(() => {
         const fetchSuppliers = async () => {
             try {
-                const response = await axios.get('https://inventory-server-eight.vercel.app/suplier');
+                const response = await axios.get('https://inventory-server-gamma.vercel.app//suplier');
                 setSuppliers(response.data || []);
             } catch (err) {
                 setError('Failed to fetch suppliers');
@@ -51,7 +51,7 @@ const EditItemPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`https://inventory-server-eight.vercel.app/inventory/${id}`, item); // Update the item
+            await axios.put(`https://inventory-server-gamma.vercel.app//inventory/${id}`, item); // Update the item
             navigate('/inventory'); // Navigate back to the inventory list after updating
         } catch (err) {
             console.error(err); // Log error in case of failure

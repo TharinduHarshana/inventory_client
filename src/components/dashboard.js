@@ -18,7 +18,7 @@ const Sidebar = ({ children }) => {
     localStorage.setItem('selectedStore', store);
 
     try {
-        const response = await fetch('https://inventory-server-eight.vercel.app/set-store', {
+        const response = await fetch('https://inventory-server-gamma.vercel.app//set-store', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
